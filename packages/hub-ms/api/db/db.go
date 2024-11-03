@@ -3,7 +3,6 @@ package db
 import (
 	"fmt"
 	"hub-api/config"
-	"hub-api/models"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -18,7 +17,6 @@ func InitDB() {
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
-	err = DB.AutoMigrate(&models.User{})
 	if err != nil {
 		log.Fatalf("failed to migrate: %v", err)
 	}
