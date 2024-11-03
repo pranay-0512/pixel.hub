@@ -1,24 +1,39 @@
 package db
 
 import (
+	"context"
 	"fmt"
 	"hub-api/config"
 	"log"
 
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var DB *gorm.DB
+var DB *mongo.Database
 
 func InitDB() {
-	var err error
-	DB, err = gorm.Open(postgres.Open(config.AppConfig.DSN), &gorm.Config{})
+	ctx := context.Background()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.AppConfig.DatabaseURL))
 	if err != nil {
-		log.Fatalf("failed to connect to database: %v", err)
+		log.Fatalln(err)
 	}
+	fmt.Println("Connected to db succesfully")
+
+	defer func() {
+		if err := client.Disconnect(ctx); err != nil {
+			panic(err)
+		}
+	}()
+
+	// Check the connection
+	err = client.Ping(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to migrate: %v", err)
+		log.Fatalln(err)
 	}
-	fmt.Println("Connected to database")
+	fmt.Println("Ping to db succesful")
+
+	// get the database
+	DB = client.Database("pixelhub")
+
 }
