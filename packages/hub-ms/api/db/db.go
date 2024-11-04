@@ -20,18 +20,11 @@ func InitDB() {
 	}
 	fmt.Println("Connected to db succesfully")
 
-	defer func() {
-		if err := client.Disconnect(ctx); err != nil {
-			panic(err)
-		}
-	}()
-
 	// Check the connection
 	err = client.Ping(ctx, nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("Ping to db succesful")
 
 	// get the database
 	DB = client.Database("pixelhub")
