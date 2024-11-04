@@ -7,16 +7,16 @@ import (
 type Config struct {
 	DatabaseURL string
 	PORT        string
-	DSN         string
+	JWTSecret   string
 }
 
 var AppConfig Config
 
 func LoadConfig() {
 	AppConfig = Config{
-		DatabaseURL: "postgres://postgres:qwerty@localhost:5432/pixelhub?sslmode=disable",
+		DatabaseURL: "mongodb://localhost:27017",
 		PORT:        "8080",
-		DSN:         "host=localhost user=postgres password=qwerty dbname=pixelhub port=5432 sslmode=disable",
+		JWTSecret:   "wt2i895a8cwkomyR8rBUgw9xsNAVvZeG",
 	}
 	log.Println("Configuration loaded.")
 }
