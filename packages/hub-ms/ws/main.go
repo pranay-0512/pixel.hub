@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 
 	"github.com/gorilla/websocket"
@@ -193,3 +194,36 @@ func wsPosition(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+var UserPos = make(map[string]string) // key: value --> "x_y": "user1"
+
+func updateUserPos(userId string, x int, y int) {
+	strPos := strconv.Itoa(x) + "_" + strconv.Itoa(y) // "x_y"
+
+	if user, ok := UserPos[strPos]; ok {
+		// if it is, delete the user from the old position
+		delete(UserPos, user)
+	}
+	UserPos[strPos] = userId
+}
+
+/*
+	func handleWsPos () {
+		maintain a userPosMap for each room.
+		it will contain the positions of all users or rather the key here will be the coordinates and the value corresponding to that key will be userId
+
+		that way we will know what all coordinates are invalid in that moment (if the key is present it means it is invalid)
+
+		if a user wants to move, we will store it's old position in a variable
+		then we will check if there is a key (new position) present in the map (is valid or not)
+			if it is invalid (present) - don't do anything return (no websocket broadcast)
+			if it is valid (not present) - delete the old key and add a new key with new pos and that userid
+
+		for chat option
+			on every move of a user, check the key corresponding to that user with all keys. If user's pos is in proximity to any other user,
+				fire up a goroutine, wait for 1 sec -
+					if still in proximity
+					start a new chatroom between the 2 people
+
+	}
+*/
