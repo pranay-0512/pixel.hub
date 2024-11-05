@@ -15,10 +15,10 @@ import (
 )
 
 type CreateMapReq struct {
-	Name        string              `json:"name" bson:"name"`
-	Width       int                 `json:"width" bson:"width"`
-	Height      int                 `json:"height" bson:"height"`
-	MapElements []models.MapElement `json:"map_elements" bson:"map_elements"`
+	Name        string                                  `json:"name" bson:"name"`
+	Width       int                                     `json:"width" bson:"width"`
+	Height      int                                     `json:"height" bson:"height"`
+	MapElements map[string]map[string]models.MapElement `json:"map_elements" bson:"map_elements"`
 }
 
 func CreateMap(c *gin.Context) {
