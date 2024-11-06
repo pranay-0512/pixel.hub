@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"hub-api/config"
 	"hub-api/db"
 	"hub-api/routes"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,7 +13,12 @@ import (
 func main() {
 	config.LoadConfig()
 
-	db.InitDB()
+	ctx := context.Background()
+	_, err := db.InitDB(ctx)
+	if err != nil {
+		log.Fatalln("error connecting to db")
+		return
+	}
 
 	router := gin.Default()
 
